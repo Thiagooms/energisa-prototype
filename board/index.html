@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mapa dos candidatos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/mapa.css">
+<link rel="stylesheet" href="css/livre.css">
+</head>
+<body>
+<section class="livre" id="vista-livre" aria-label="Board">
+  <div class="area" id="area">
+    <div class="moldura" id="moldura" tabindex="0" aria-label="Área do desenho">
+      <div class="palco" id="palco">
+        <svg class="fios" id="fios" viewBox="-10000 -10000 20000 20000" aria-hidden="true"></svg>
+        <div id="nos"></div>
+        <svg class="rotulos" id="rotulos" viewBox="-10000 -10000 20000 20000" aria-hidden="true"></svg>
+        <svg class="guias" id="guias" viewBox="-10000 -10000 20000 20000" aria-hidden="true"></svg>
+      </div>
+      <div class="laco" id="laco" hidden></div>
+      <div class="vazio" id="l-vazio" hidden>
+        <strong>O board está vazio</strong>
+        <p>Escolha uma ferramenta na barra, dê dois cliques aqui para criar um card ou comece por um modelo pronto.</p>
+        <div class="vazio-acoes">
+          <button type="button" class="bt forte" data-vazio="modelos">Escolher um modelo</button>
+          <button type="button" class="bt" data-vazio="biblioteca">Abrir a biblioteca</button>
+        </div>
+      </div>
+      <button type="button" class="bt sair" id="l-sair" hidden>Sair da apresentação</button>
+    </div>
+
+    <div class="flut painel l-topo-esq">
+      <input type="text" class="l-nome" id="l-nome" maxlength="60" placeholder="Board sem nome" aria-label="Nome do board" autocomplete="off" spellcheck="false">
+      <span class="sep-v" aria-hidden="true"></span>
+      <button type="button" class="bt plano" id="l-modelos" title="Começar por um desenho pronto">Modelos</button>
+      <button type="button" class="bt plano so-icone" id="l-opcoes" aria-label="Mais opções" aria-haspopup="menu" title="Mais opções"></button>
+    </div>
+
+    <div class="flut painel l-topo-dir">
+      <button type="button" class="bt forte" id="l-apresentar" title="Tela cheia, sem edição">Apresentar</button>
+    </div>
+
+    <div class="flut painel f-barra" id="f-barra" role="toolbar" aria-label="Ferramentas"></div>
+    <div class="painel f-formas" id="f-formas" role="group" aria-label="Formas" hidden></div>
+    <aside class="paleta painel" id="paleta" aria-label="Biblioteca de componentes" hidden></aside>
+
+    <div class="flut painel l-zoom" role="group" aria-label="Zoom">
+      <button type="button" class="bt plano so-icone z-extra" id="z-menos" aria-label="Diminuir zoom" title="Diminuir zoom (-)">&minus;</button>
+      <button type="button" class="bt plano zoom z-extra" id="z-zoom" title="Voltar a 100% (Ctrl+0)">100%</button>
+      <button type="button" class="bt plano so-icone z-extra" id="z-mais" aria-label="Aumentar zoom" title="Aumentar zoom (+)">+</button>
+      <span class="sep-v z-extra" aria-hidden="true"></span>
+      <button type="button" class="bt plano so-icone" id="z-ajustar" aria-label="Ver o desenho inteiro" title="Ver o desenho inteiro (Shift+1)"></button>
+      <button type="button" class="bt plano so-icone" id="z-ajuda" aria-label="Atalhos e gestos" title="Atalhos e gestos (?)">?</button>
+    </div>
+
+    <p class="dica" id="l-dica" hidden></p>
+    <div class="aviso" id="l-aviso" role="status" hidden></div>
+    <aside class="inspetor painel" id="inspetor" aria-label="Propriedades do item selecionado" hidden></aside>
+    <div class="menu painel" id="l-menu" role="menu" hidden></div>
+  </div>
+</section>
+
+<div class="page" id="vista-mapa" hidden>
+  <header class="topo">
+    <div class="marca">
+      <span class="sobre">Projeto Energisa · Equipe I</span>
+      <h1>Mapa dos candidatos</h1>
+    </div>
+    <a class="bt" href="#livre" data-vista="livre">Voltar ao board</a>
+  </header>
+  <section class="vista" aria-label="Mapa dos candidatos">
+    <p class="intro">Sete decisões de desenho, as opções de cada uma e o caminho que os três candidatos percorrem do dispositivo até a correção do analista. Clique num card para ver o que ele ganha e o que ele perde.</p>
+    <div class="quadro">
+      <div class="barra">
+        <div class="modos" id="modos" role="group" aria-label="Candidato em destaque"></div>
+        <div class="legenda">
+          <span><i class="amostra">A</i> candidato que usa a opção</span>
+          <span>trilha = caminho do candidato</span>
+        </div>
+      </div>
+      <div class="painel resumo" id="resumo" aria-live="polite"></div>
+      <div class="painel rolagem">
+        <div class="mapa" id="mapa">
+          <svg class="trilha" id="trilha" aria-hidden="true"></svg>
+        </div>
+      </div>
+    </div>
+    <p class="rodape">Chamadas, peças e risco são estimativas qualitativas tiradas dos documentos de desenho, não resultados medidos. Cada decisão só fecha depois do experimento descrito no documento dela.</p>
+  </section>
+</div>
+
+<div class="veu" id="veu" hidden>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-nome"></div>
+</div>
+
+<script src="js/dados.js"></script>
+<script src="js/desenho-inicial.js"></script>
+<script src="js/util.js"></script>
+<script src="js/dialogo.js"></script>
+<script src="js/detalhe.js"></script>
+<script src="js/mapa.js"></script>
+<script src="js/livre/icones.js"></script>
+<script src="js/livre/estado.js"></script>
+<script src="js/livre/blocos.js"></script>
+<script src="js/livre/catalogos/geral.js"></script>
+<script src="js/livre/catalogos/energisa.js"></script>
+<script src="js/livre/geometria.js"></script>
+<script src="js/livre/palco.js"></script>
+<script src="js/livre/edicao.js"></script>
+<script src="js/livre/gestos.js"></script>
+<script src="js/livre/menu.js"></script>
+<script src="js/livre/teclado.js"></script>
+<script src="js/livre/ferramentas.js"></script>
+<script src="js/livre/paleta.js"></script>
+<script src="js/livre/inspetor.js"></script>
+<script src="js/livre/livre.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+dados/
+resultados/
+.env
+.venv/
+__pycache__/
+*.pyc
+board/dist/
